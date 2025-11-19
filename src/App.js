@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./App.css";
 
 function App() {
   const [input, setInput] = useState("");
+  const [history, setHistory] = useState([]);
 
-  const handleClick = (value) => {
+  const fetchHistory = async () => {
+    const res = await axios.get("http://localhost:3000/history");
+    setHistory(res.data);
+  };
+
+  useEffect(() => {
+    fetchHistory(); // โหลดตอนเข้าเว็บ
+  }, []);
+
+  const handleClick = async (value) => {
     if (value === "AC") {
       setInput("");
     } else if (value === "DE") {
       setInput(input.slice(0, -1));
     } else if (value === "=") {
       try {
-        setInput(String(eval(input)));
+        const result = String(eval(input));
+        setInput(result);
+
+        // ส่งไป backend
+        await axios.post("http://localhost:3000/calculate", {
+          expression: input,
+          result: result
+        });
+
+        // อัปเดตประวัติใหม่
+        fetchHistory();
+
       } catch {
         setInput("Error");
       }
@@ -31,6 +53,7 @@ function App() {
   return (
     <div className="calculator">
       <div className="display">{input || "0"}</div>
+
       <div className="buttons">
         {buttons.map((btn) => (
           <button
@@ -40,6 +63,13 @@ function App() {
           >
             {btn}
           </button>
+        ))}
+      </div>
+
+      <div className="history">
+        <h3>History</h3>
+        {history.map((h) => (
+          <div key={h.id}>{h.expression} = {h.result}</div>
         ))}
       </div>
     </div>
