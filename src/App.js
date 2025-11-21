@@ -7,8 +7,12 @@ function App() {
   const [history, setHistory] = useState([]);
 
   const fetchHistory = async () => {
-    const res = await axios.get("http://localhost:3000/history");
-    setHistory(res.data);
+    try {
+      const res = await axios.get("http://localhost:3000/history");
+      setHistory(res.data.reverse());
+    } catch (error) {
+      console.error("Error fetching history:", error);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +45,10 @@ function App() {
       setInput(input + value);
     }
   };
+  // ฟังก์ชันคลิกประวัติ
+  const handleHistoryClick = (expression) => {
+    setInput(expression);
+  };
 
   const buttons = [
     "AC", "DE", ".", "/",
@@ -66,10 +74,18 @@ function App() {
         ))}
       </div>
 
-      <div className="history">
+       <div className="history">
         <h3>History</h3>
+        {history.length === 0 && <p>No calculations yet.</p>}
         {history.map((h) => (
-          <div key={h.id}>{h.expression} = {h.result}</div>
+          <div
+            key={h.id}
+            className="history-item"
+            onClick={() => handleHistoryClick(h.expression)}
+          >
+            <span className="expression">{h.expression}</span>
+            <span className="result">= {h.result}</span>
+          </div>
         ))}
       </div>
     </div>

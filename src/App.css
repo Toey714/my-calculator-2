@@ -120,3 +120,59 @@ button:active {
     transform: scale(0.95);
     opacity: 0.8;
 }
+
+.history {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-top: 15px;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-family: monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.expression {
+  color: #ffd966; /* สีสว่างดูดีบน dark theme */
+  font-weight: 600;
+}
+
+.result {
+  color: #00ffea; /* สีสดใส สะดุดตา */
+  font-weight: bold;
+}
+
+/* ปรับ Scrollbar ให้สวย */
+.history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+
+.history::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+
+.history::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
