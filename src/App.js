@@ -5,6 +5,7 @@ import "./App.css";
 function App() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(true); // ปิด/เปิดประวัติ
 
   const fetchHistory = async () => {
     try {
@@ -16,7 +17,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetchHistory(); // โหลดตอนเข้าเว็บ
+    fetchHistory();
   }, []);
 
   const handleClick = async (value) => {
@@ -29,15 +30,12 @@ function App() {
         const result = String(eval(input));
         setInput(result);
 
-        // ส่งไป backend
         await axios.post("http://localhost:3000/calculate", {
           expression: input,
           result: result
         });
 
-        // อัปเดตประวัติใหม่
         fetchHistory();
-
       } catch {
         setInput("Error");
       }
@@ -45,9 +43,19 @@ function App() {
       setInput(input + value);
     }
   };
-  // ฟังก์ชันคลิกประวัติ
+
   const handleHistoryClick = (expression) => {
     setInput(expression);
+  };
+
+  // ฟังก์ชันลบประวัติ
+  const deleteHistory = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/history/${id}`);
+      fetchHistory();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   const buttons = [
@@ -60,8 +68,11 @@ function App() {
 
   return (
     <div className="calculator">
+
+      {/* Display */}
       <div className="display">{input || "0"}</div>
 
+      {/* Buttons */}
       <div className="buttons">
         {buttons.map((btn) => (
           <button
@@ -74,20 +85,38 @@ function App() {
         ))}
       </div>
 
-       <div className="history">
-        <h3>History</h3>
-        {history.length === 0 && <p>No calculations yet.</p>}
-        {history.map((h) => (
-          <div
-            key={h.id}
-            className="history-item"
-            onClick={() => handleHistoryClick(h.expression)}
-          >
-            <span className="expression">{h.expression}</span>
-            <span className="result">= {h.result}</span>
-          </div>
-        ))}
-      </div>
+      {/* ปุ่มเปิด/ปิดประวัติ */}
+      <button
+        className="toggle-history"
+        onClick={() => setShowHistory(!showHistory)}
+      >
+        {showHistory ? "ซ่อนประวัติ" : "แสดงประวัติ"}
+      </button>
+
+      {/* History Box */}
+      {showHistory && (
+        <div className="history">
+          <h3>History</h3>
+          {history.length === 0 && <p>No calculations yet.</p>}
+
+          {history.map((h) => (
+            <div key={h.id} className="history-item">
+              <div onClick={() => handleHistoryClick(h.expression)}>
+                <span className="expression">{h.expression}</span>
+                <span className="result">= {h.result}</span>
+              </div>
+
+              {/* ปุ่มลบ */}
+              <button
+                className="delete-btn"
+                onClick={() => deleteHistory(h.id)}
+              >
+                🗑️
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

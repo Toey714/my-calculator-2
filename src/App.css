@@ -122,18 +122,18 @@ button:active {
 }
 
 .history {
-  max-height: 220px;
+  max-height: 180px;
   overflow-y: auto;
-  padding-top: 15px;
-  margin-top: 20px;
+  padding-top: 2px;
+  margin-top: 15px;
   border-top: 1px solid rgba(255,255,255,0.2);
 }
 
 .history-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  padding: 5px 12px;
+  margin-bottom: 6px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
   font-family: monospace;
@@ -144,7 +144,7 @@ button:active {
 
 .history-item:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateX(5px);
+  transform: translateX(2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
@@ -175,4 +175,36 @@ button:active {
 
 .history::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.5);
+}
+.toggle-history {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #6a5acd;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-history:hover {
+  background: #7b6df0;
+}
+
+.delete-btn {
+  background: #ff4444;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 0.9rem;
+  margin-left: 10px;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ff6666;
 }
